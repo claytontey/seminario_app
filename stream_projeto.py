@@ -1,16 +1,24 @@
 import streamlit as st
+import pandas as pd
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+from datetime import datetime
+import os
 
+# Configuração das credenciais do Google
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
 
-# Carrega as credenciais do secrets
-credentials_dict = st.secrets["gcp_service_account"]
-creds = ServiceAccountCredentials.from_json_keyfile_dict(credentials_dict, scope)
+# Verifica se está rodando localmente ou na nuvem
+if os.path.exists("service_account.json"):
+    creds = ServiceAccountCredentials.from_json_keyfile_name("service_account.json", scope)
+else:
+    credentials_dict = st.secrets["gcp_service_account"]
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(credentials_dict, scope)
+
 client = gspread.authorize(creds)
 sheet = client.open("Temas_CD").sheet1
 
-
+# Funções auxiliares
 def carregar_dados():
     dados = sheet.get_all_records()
     return pd.DataFrame(dados)
@@ -30,6 +38,7 @@ TEMAS = [
     "7. Previsão do tempo de entrega de pacotes"
 ]
 
+# Interface
 st.title("📘 Escolha do Tema para o Trabalho de Ciência de Dados")
 
 codigo = st.text_input("Digite o código de acesso para continuar:", type="password")
