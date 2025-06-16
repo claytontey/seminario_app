@@ -1,2 +1,5 @@
 # Evita subir a chave de API do Google
 service_account.json
+
+# Evita subir o arquivo de configuração do streamlit
+*.streamlit/
