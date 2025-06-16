@@ -1,2 +1,2 @@
 # seminario_app
-Diretório de trabalho dos alunos de CD 2025
+Seminário de projeto para os alunos de ciência de dados 2025
