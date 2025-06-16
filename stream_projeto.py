@@ -5,15 +5,19 @@ from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
 import os
 
-# Configuração das credenciais do Google
+import os
+
+# Autenticação com o Google
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
 
-# Verifica se está rodando localmente ou na nuvem
 if os.path.exists("service_account.json"):
+    from oauth2client.service_account import ServiceAccountCredentials
     creds = ServiceAccountCredentials.from_json_keyfile_name("service_account.json", scope)
 else:
+    from oauth2client.service_account import ServiceAccountCredentials
+    import json
     credentials_dict = st.secrets["gcp_service_account"]
-    creds = ServiceAccountCredentials.from_json_keyfile_dict(credentials_dict, scope)
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(dict(credentials_dict), scope)
 
 client = gspread.authorize(creds)
 sheet = client.open("Temas_CD").sheet1
